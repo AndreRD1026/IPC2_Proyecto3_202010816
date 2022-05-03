@@ -1,20 +1,16 @@
 from operator import neg
-from mascota import Mascota
 from positivos import positivos
 from negativos import negativos
 from empresa import Empresa
+from mensajes import mensajes
 
 class Manager():
     def __init__(self):
-        self.mascotas = []
         self.positivos = []
         self.negativos = []
         self.empresas = []
+        self.mensajes = []
 
-
-    def agregar_mascota(self, n, a, e):
-        nuevo = Mascota(n, a, e)
-        self.mascotas.append(nuevo)
 
     def agregar_palabra_pos(self, palabra):
         palabra_pos = positivos(palabra)
@@ -24,21 +20,13 @@ class Manager():
         palabra_neg = negativos(palabra)
         self.negativos.append(palabra_neg)
 
-    def agregar_empresa(self, nombre,servicios,alias):
-        empresa = Empresa(nombre,servicios,alias)
-        self.empresas.append(empresa)
+    def agregar_empresa(self, nombre):
+        empr = Empresa(nombre)
+        self.empresas.append(empr)
 
-    
-    def obtener_mascotas(self):
-        json = []
-        for mascota in self.mascotas:
-            mascota = {
-                'nombre' : mascota.nombre,
-                'tipo' : mascota.animal,
-                'edad' : mascota.edad
-            }
-            json.append(mascota)
-        return json
+    def agregar_mensajes(self, lugar, fecha, hora,usuario, red,mensaje):
+        nuevo_men = mensajes(lugar, fecha, hora, usuario, red, mensaje)
+        self.mensajes.append(nuevo_men)
 
     def obtener_palabras_pos(self):
         json = []
@@ -58,15 +46,28 @@ class Manager():
             json.append(negativo)
         return json
 
-    def obtener_empresas(self):
+    def obtener_empresa(self):
         json = []
-        for empresa in self.empresas:
+        for empresa in  self.empresas:
             empresa = {
-                'Nombre' : empresa.nombre,
-                'Servicio' : empresa.servicios,
-                'Alias' : empresa.alias
+                'nombre' : empresa.nombre,
+                'servicios' : empresa.obtener_servicio()
             }
             json.append(empresa)
+        return json
+
+    def obtener_mensajes(self):
+        json = []
+        for mensaje in self.mensajes:
+            mensaje = {
+                'Lugar' : mensaje.lugar,
+                'fecha' : mensaje.fecha,
+                'hora' : mensaje.hora,
+                'usuario' : mensaje.usuario,
+                'red' : mensaje.red,
+                'mensaje' : mensaje.mensaje
+            }
+            json.append(mensaje)
         return json
 
     def crearArchivoAlmacenamiento(self):
