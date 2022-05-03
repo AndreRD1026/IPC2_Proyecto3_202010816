@@ -65,31 +65,51 @@ def agregarDTE():
                 }
                 salida.append(objeto)
 
-
-@app.route('/add', methods=['POST'])
-def add():
+@app.route('/addarchivo', methods=['POST'])
+def addarchivo():
+    palabra_pos = ''
+    palabra_neg = ''
+    subelemento1 = ''
     xml = request.get_data().decode('utf-8')
     raiz = ET.XML(xml)
     for elemento in raiz:
-        nombre = ''
-        tipo = ''
-        edad = 0
-        for subelemnto in elemento:
-            if subelemnto.tag == 'nombre':
-                nombre = subelemnto.text
-            if subelemnto.tag == 'tipo':
-                tipo = subelemnto.text
-            if subelemnto.tag == 'edad':
-                edad = subelemnto.text
-        manage.agregar_mascota(nombre, tipo, edad)
-    return jsonify({'ok' : True, 'msg':'Macota insertada a la BD con exito'}), 200
+        for subelemento in elemento:
+            if subelemento.tag == 'sentimientos_positivos':
+                for subelemento1 in subelemento:
+                    if subelemento1.tag == 'palabra':
+                        #palabra_pos = subelemento1.text.strip()
+                        manage.agregar_palabra_pos(subelemento1.text.strip())
+            if subelemento.tag == 'sentimientos_negativos':
+                for subelemento1 in subelemento:
+                    if subelemento1.tag == 'palabra':
+                        #palabra_neg = subelemento1.text.strip()
+                        manage.agregar_palabra_neg(subelemento1.text.strip())
+            # if subelemento.tag == 'empresas_analizar':
+            #     for subelemento1 in subelemento:
+            #         for subelemento2 in subelemento1:
+            #             if subelemento2.tag == 'nombre':
+            #                 nombre = subelemento2.text
+            #             if subelemento2.tag == 'servicio':
+            #                 servicio = subelemento2.attrib
+            #             if subelemento2.tag == 'alias':
+            #                 alias = subelemento2.text
+        #manage.agregar_palabra_pos(palabra_pos)
+        #manage.agregar_palabra_neg(palabra_neg)
+        #manage.agregar_empresa(nombre,servicio,alias)
+    return jsonify({'ok' : True, 'msg':'Palabras insertada a la BD con exito'}), 200
 
+@app.route('/getpalabrasp')
+def get_palabras_poa():
+    return jsonify(manage.obtener_palabras_pos()), 200  
 
+@app.route('/getpalabrasn')
+def get_palabras_neg():
+    return jsonify(manage.obtener_palabras_neg()), 200
 
-@app.route('/getmascotas')
-def get_pets():
-    return jsonify(manage.obtener_mascotas()), 200
-
+@app.route('/getempresas')
+def get_empresas():
+    return jsonify(manage.agregar_empresa()), 200
+        
 
 if __name__=='__main__':
     app.run(debug=True, port=4000)
