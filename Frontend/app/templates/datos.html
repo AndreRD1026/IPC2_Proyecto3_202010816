@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+<div id="printContent">
+    <h1 style="text-align: center; margin-top: 25px;">
+        Autorizaciones
+    </h1>
+    {% if Autorizaciones.LISTADOAUTORIZACIONES|length == 0 %}
+
+    <br>
+    <h3 style="text-align: center;margin-top: 5%"> No hay Autorizaciones Por Mostrar</h3>
+    {% else %}
+    <br>
+    <div class="row">
+        <div class="col-lg-12" style="display: flex; justify-content: center;">
+            <button class="btn btn-warning" id="imprimir" onclick="imprimir()" >Guardar PDF</button>
+        </div>
+    </div>
+    {% for autorizacion in Autorizaciones.LISTADOAUTORIZACIONES %}
+    <hr>
+    <br>
+    <div class="row" style="width: 80%; border: solid 2px black; margin-left: 10%;">
+        <div class="col-lg-12">
+            <h3 style="text-align: center; margin-bottom: 15px;">
+                Autorización - {{autorizacion.FECHA}}
+            </h3>
+            <div class="row" style="font-size: 20px;">
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'received.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Facturas Recibidas: {{autorizacion.FACTURAS_RECIBIDAS}}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'correct.jpg' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Facturas Correctas: {{autorizacion.FACTURAS_CORRECTAS}}
+                </div>
+            </div>
+            <div class="row" style="font-size: 20px;">
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'emisor.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Cantidad de Emisores: {{autorizacion.CANTIDAD_EMISORES}}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'receptor.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Cantidad de Receptores: {{autorizacion.CANTIDAD_RECEPTORES}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="text-align: center; font-size: 20px; border: 1px solid black">
+                    <img src="{% static 'error.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Errores
+                </div>
+            </div>
+            <div class="row" style="font-size: 20px;">
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'error.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Nit del Emisor: {{autorizacion.ERRORES.NIT_EMISOR}}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'error.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Nit del Receptor: {{autorizacion.ERRORES.NIT_RECEPTOR}}
+                </div>
+            </div>
+            <div class="row" style="font-size: 20px;">
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'error.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> IVA Incorrecto: {{autorizacion.ERRORES.IVA}}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'error.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Total Incorrecto: {{autorizacion.ERRORES.TOTAL}}
+                </div>
+            </div>
+            <div class="row" style="font-size: 20px;">
+                <div class="col-lg-12 col-md-12 col-sm-12" style="border:1px solid black">
+                    <img src="{% static 'error.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Referencia Duplicada: {{autorizacion.ERRORES.REFERENCIA_DUPLICADA}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12" style="text-align: center; font-size: 20px; border: 1px solid black">
+                    <img src="{% static 'approve.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Aprobaciones
+                </div>
+            </div>
+
+            {%for aprobacion in autorizacion.LISTADO_AUTORIZACIONES %}
+                <div class="row" style="font-size: 20px;">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="border:1px solid black">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row" style="font-size: 20px;">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="border:1px solid black">
+                        <img src="{% static 'code.jpg' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Código Aprobación: {{aprobacion.CODIGO_APROBACION}}
+                    </div>
+                </div>
+                <div class="row" style="font-size: 20px;">
+                    <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                        <img src="{% static 'emisor.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Nit del Emisor: {{aprobacion.NIT_EMISOR}}
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                        <img src="{% static 'receptor.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Nit del Receptor: {{aprobacion.NIT_RECEPTOR}}
+                    </div>
+                </div>
+                <div class="row" style="font-size: 20px;">
+                    <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                        <img src="{% static 'money.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Valor: Q{{aprobacion.VALOR}}
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12" style="border:1px solid black">
+                        <img src="{% static 'key.png' %}" width="20px" height="auto" style="margin-bottom: 5px;"> Referencia: {{aprobacion.REFERENCIA}}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+<br>
+
+
+{% endfor %}
+</div>
+<br>
+<br>
+<div class="row">
+    <div class="col-lg-12" style="text-align: center;">
+        <h3>Base de Datos autorizaciones.xml</h3>
+        <br>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="19" style="width: 50%; margin-left: 25%;" disabled>{{Salida}}</textarea>
+    </div>
+
+</div>
+<br>
+<div class="row" style="margin-top: 50px;">
+    <div class="col-lg-12" style="display: flex;justify-content: center;">
+        <form action="/reset/" method="POST">
+            {% csrf_token %}
+            <button  class="btn btn-danger">Resetear la Base de Datos</button>
+        </form>
+    </div>
+</div>
+
+
+{% endif %}
+
+</div>
+{% endblock content %}
+{%block script%}
+<script>
+
+
+function imprimir(){
+    html2canvas(document.getElementById('printContent'), {height: document.body.windowHeight, width: document.body.windowWidth}).then(function (canvas) {
+        // document.body.appendChild(canvas);
+        var wid;
+        var hgt;
+
+        var img = canvas.toDataURL("image/png", wid = canvas.width, hgt = canvas.height);
+        var hratio = hgt / wid
+        var doc = new jsPDF('p', 'pt', 'a4');
+        var width = doc.internal.pageSize.width;
+        var height = width * hratio
+        doc.addImage(img, 'JPEG', 20, 20, width, height);
+        doc.save('autorizaciones.pdf');
+      });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{%block style %}
+<style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Lato", sans-serif
+    }
+
+    .w3-bar,
+    h1,
+    button {
+        font-family: "Montserrat", sans-serif
+    }
+
+    .fa-anchor,
+    .fa-coffee {
+        font-size: 200px
+    }
+</style>
+{%endblock%}
+{% block content %}
+<!-- Second Grid -->
+<div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+    <div class="w3-content">
+        <div class="w3-third w3-center">
+            <i class="fa  w3-padding-64 w3-text-red w3-margin-right"><img src="{% static 'FotoparaU.jpg' %}" width="80%">
+            </i>
+        </div>
+
+        <div class="w3-twothird">
+            <h1>César André Ramírez Dávila</h1>
+            <h5 class="w3-padding-32">
+               Estudiante de tercer año de Ingeniería en Ciencias y Sistemas de la Universidad de San Carlos de Guatemala
+                <br><br> Conocimientos en Python, JavaScript, Java, HTML, CSS, SQL 
+                <br><br> 20 Años de edad
+                <br><br> E-Mail de contacto: 
+                <br><b>davilacesar125@gmail.com </b>
+            </h5>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

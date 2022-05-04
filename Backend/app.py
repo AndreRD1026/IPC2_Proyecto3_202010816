@@ -9,7 +9,9 @@ import re
 app = Flask(__name__)
 CORS(app)
 listadiccionario = []
+listasalida = []
 manage = Manager()
+
 
 #@app.route('/')
 #def index():
@@ -64,6 +66,8 @@ def addarchivo():
                     expresion_re = re.compile(r'(\D+:)\s+(\D+),\s+(\d+\D\d+\D\d+)\s+(\d+:\d+)\s+(\D+:)\s+(\S+|([^@]+@[^.]+.\S+))\s*(\D+:)\s+(\S+)\s+(\D+)')
                     datosmen = expresion_re.findall(subelemento.text)
                     manage.agregar_mensajes(datosmen[0][1],datosmen[0][2],datosmen[0][3],datosmen[0][5],datosmen[0][8],datosmen[0][9])
+                    fecha = (datosmen[0][2])
+                    print(fecha)
                     # info = subelemento.text.replace("\r","").replace("\n","").replace('\t',"")
                     # #print(info)
                     # lugarfecha = info.split(',')
@@ -79,23 +83,87 @@ def addarchivo():
                     # print("Usuario", usuario)
                     # print("Red", red)
                     # print(mensaje)
-
+                    posicion = 0
+                    encontrado = False
+                    #inicioCorrelativo = int(anio+mes+dia)
+                    
+                    for i in range (0,len(listasalida)):
+                        if listasalida[i].fecha == fecha:
+                            encontrado = True
+                            posicion = i
+                            print("Dte correcto")
+                    
+                    
+    actualizarXml()    
     return jsonify({'ok' : True, 'msg':'Archivo XML leído correctamente'}), 200
 
-@app.route('/getpalabrasp')
+def normalize(s):
+    replacements = (
+        ("á", "a"),
+        ("é", "e"),
+        ("í", "i"),
+        ("ó", "o"),
+        ("ú", "u"),
+    )
+    for a, b in replacements:
+        s = s.replace(a, b).replace(a.upper(), b.upper())
+    return s
+
+
+def actualizarXml():
+    global listasalida
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += "<lista_respuestas>\n"
+    for salida in listasalida:
+        xml += "    <respuesta>\n"
+        xml += "        <fecha>" + salida.fecha + "</fecha>\n"
+        xml += "        <mensajes>\n"
+        xml += "            <total>" + "Total mensajes" + "</total>\n"
+        xml += "            <positivos>" + "Cantidad positivos" + "</positivos>\n"
+        xml += "            <negativos>" + "Cantidad negativos" + "</negativos>\n"
+        xml += "            <neutros>" + "Cantidad neutros" + "</neutros>\n"
+        xml += "        </mensajes>\n"
+        xml += "       <analisis>\n"
+        xml += "        <empresa nombre=>\n"
+        xml += "        <mensajes>\n"
+        xml += "            <total>" + "Total mensajes" + "</total>\n"
+        xml += "            <positivos>" + "Cantidad positivos" + "</positivos>\n"
+        xml += "            <negativos>" + "Cantidad negativos" + "</negativos>\n"
+        xml += "            <neutros>" + "Cantidad neutros" + "</neutros>\n"
+        xml += "        </mensajes>\n"
+        xml += "        <servicios>\n"
+        xml += "            <servicio nombre=inscripción>\n"
+        xml += "        <mensajes>\n"
+        xml += "            <total>" + "Total mensajes" + "</total>\n"
+        xml += "            <positivos>" + "Cantidad positivos" + "</positivos>\n"
+        xml += "            <negativos>" + "Cantidad negativos" + "</negativos>\n"
+        xml += "            <neutros>" + "Cantidad neutros" + "</neutros>\n"
+        xml += "        </mensajes>\n"
+        xml += "            </servicio>\n"
+        xml += "        </servicios>\n"
+        xml += "        </empresa>\n"
+        xml += "       </analisis>\n"
+        xml += "     </respuesta>\n"
+    xml += "</lista_respuestas>\n"
+        
+    fo = open("salida.xml","w",  encoding='utf8')
+    fo.write(xml)
+    fo.close()
+
+@app.route('/getpalabrasp', methods=['GET'])
 def get_palabras_poa():
     return jsonify(manage.obtener_palabras_pos()), 200  
 
-@app.route('/getpalabrasn')
+@app.route('/getpalabrasn', methods=['GET'])
 def get_palabras_neg():
     return jsonify(manage.obtener_palabras_neg()), 200
 
-@app.route('/getempresa')
+@app.route('/getempresa', methods=['GET'])
 def get_empresas():
     return jsonify(manage.obtener_empresa()), 200
 
 
-@app.route('/getmensaje')
+@app.route('/getmensaje', methods=['GET'])
 def get_mensaje():
     return jsonify(manage.obtener_mensajes()), 200
         
