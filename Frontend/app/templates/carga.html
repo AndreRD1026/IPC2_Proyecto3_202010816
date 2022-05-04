@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <br>
+    <form action="/carga/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="custom-file" style="margin-left: 10px;" >
+                    <input type="file" id="file" name="file" accept="text/xml">
+                </div>
+            </div>
+    
+            <div class="col-md-6" >
+                
+                <button class="btn btn-success" style="width: 150px;float:right; position:relative; margin-right: 20px;">Enviar Archivo</button>
+    </form>
+    
+                
+            </div>
+        </div>
+        <br>
+        
+        
+            <div class="row" style="padding-left: 10px; padding-right: 10px;">
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Entrada</label>
+                        {% if contenido%}
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="19" disabled>{{contenido}}</textarea>
+                        {% else %}
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="19" disabled></textarea>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Salida</label>
+                        {% if response%}
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="19" disabled>{{response}}</textarea>
+                        {% else %}
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="19" disabled></textarea>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+    
+        
+
+{% endblock content %}

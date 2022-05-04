@@ -1,0 +1,108 @@
+
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+    crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="{% static 'jspdf.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"
+    integrity="sha512-cLuyDTDg9CSseBSFWNd4wkEaZ0TBEpclX0zD3D6HjI19pO39M58AgJ1SjHp6c7ZOp0/OCRcC2BCvvySU9KJaGw=="
+    crossorigin="anonymous"></script>
+  <script src="http://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        <title> {{tab}}</title>
+    
+    
+        {%block style%}
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="font-size:18px; ">
+            <a class="navbar-brand" href="{% url 'index' %}" style="font-size: 25px;">Validar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    {% if 'Inicio' == tab %}
+                    <li class="nav-item active" style="padding-right: 15;">
+                    {% else %}
+                    <li class="nav-item" style="padding-right: 15;"></li>
+                    {% endif %}
+                        <a class="nav-link" href="{% url 'index' %}">Inicio</a>
+                    </li>
+                    <!--{% if 'Carga' == tab %}
+                    <li class="nav-item active"style="padding-right: 15px;">
+                    {% else %}
+                    <li class="nav-item"style="padding-right: 15px;">
+                    {% endif %}
+                        
+                        <a class="nav-link" href="{% url 'carga' %}">Cargar Archivo</a>
+                    </li> -->
+                    
+                    <!---->
+                    {% if 'Consulta de Datos' == tab %}
+                    <li class="nav-item dropdown active"style="padding-right: 15px;">
+                    {% else %}
+                    <li class="nav-item dropdown"style="padding-right: 15px;">
+                    {% endif %}
+                    
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Peticiones
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item"href="{% url 'datos' %}">Consultar Datos</a>
+                            <!--<a class="dropdown-item" href="">Resumen IVA</a>-->
+                            <!--<a class="dropdown-item" href="">Resumen Rango de Fechas</a>-->
+                            <a class="dropdown-item" href="">Resumen de Clasificación por Fechas</a>
+                            <a class="dropdown-item" href="">Resumen Rango de Fechas</a>
+                            <a class="dropdown-item" href="">Prueba de mensaje</a>
+                            
+                        </div>
+                    </li>
+                    {% if 'Ayuda' == tab %}
+                    <li class="nav-item dropdown active"style="padding-right: 15px;">
+                    {% else %}
+                    <li class="nav-item dropdown"style="padding-right: 15px;">
+                    {% endif %}
+                    
+                        
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ayuda
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item"href="{% url 'ayuda' %}">Ayuda</a>
+                                <a class="dropdown-item" href="{% url 'info' %}">Información del Estudiante</a>
+                                
+                                
+                            </div>
+                        </li>
+                </ul>
+            </div>
+        </nav>
+        {% block content %}{% endblock %}
+        <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+            <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
+                <h1 class="w3-margin w3-xlarge">César André Ramírez Dávila - 202010816</h1>
+                <h1 class="w3-margin w3-xlarge">Proyecto No. 3 - IPC2 "E"</h1>
+            </div>
+        </footer>
+    </body>
+    {%block script%}
+    {% endblock %}
+    
+</html>
