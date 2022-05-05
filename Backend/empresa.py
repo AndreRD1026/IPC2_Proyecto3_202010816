@@ -14,7 +14,7 @@ class Empresa():
         json = []
         for servicio in  self.servicios:
             servicio = {
-                'nombre' : servicio.nombre,
+                'servicio' : servicio.nombre,
                 'alias' : servicio.obtener_alias()
             }
             json.append(servicio)

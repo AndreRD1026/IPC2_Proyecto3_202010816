@@ -48,34 +48,79 @@ def reset(request):
             
     return render(request,'datos.html',contexto)
 
-def carga(request):
-    contexto = {
-        'tab' : 'Carga',
-        'contenido': None,
-        'response' : None
-    }
+# def carga(request):
+#     contexto = {
+#         'tab' : 'Carga',
+#         'contenido': None,
+#         'response' : None
+#     }
 
+#     if request.method == 'POST':
+#         form = FileForm(request.POST, request.FILES)
+#         if form.is_valid():
+            
+#             f = request.FILES['file'].read()
+#             response = requests.post(endpoint+"addarchivo",data = f)
+#             fo = open("../Backend/salida.xml","r",  encoding='utf8')
+#             texto = fo.read()
+#             print(texto)
+
+            
+#             if response.json()['ok'] == True :
+#                 print("Hola")
+#                 contexto['contenido']= f.decode('utf-8')
+#                 contexto['response']= texto
+#             else:
+                
+#                 contexto['contenido']= f.decode('utf-8')
+#                 contexto['response']= 'Error en el archivo XML que se subió'
+            
+#             fo.close()
+
+def carga(request):
+    ctx = {
+        'tab' : 'Carga',
+        'content':None,
+        'response':None
+    }
     if request.method == 'POST':
         form = FileForm(request.POST, request.FILES)
         if form.is_valid():
-            
-            f = request.FILES['file'].read()
-            response = requests.post(endpoint+"addarchivo",data = f)
-            fo = open("../Backend/salida.xml","r",  encoding='utf8')
-            texto = fo.read()
-            print(texto)
-
-            
-            if response.json()['ok'] == True :
-                print("Hola")
-                contexto['contenido']= f.decode('utf-8')
-                contexto['response']= texto
+            f = request.FILES['file']
+            xml_binary = f.read()
+            xml = xml_binary.decode('utf-8')
+            ctx['content'] = xml
+            response = requests.post(endpoint + 'addVarious', data=xml_binary)
+            if response.ok:
+                ctx['response'] = 'Archivo XML cargado corrrectamente'
             else:
-                
-                contexto['contenido']= f.decode('utf-8')
-                contexto['response']= 'Error en el archivo XML que se subió'
-            
-            fo.close()
+                ctx['response'] = 'El archivo se envio, pero hubo un error en el servidor'
+    else:
+        return render(request, 'carga.html')
+    return render(request, 'carga.html', ctx)
+
+
+def mensaje(request):
+    ctx = {
+        'tab' : 'Mensaje',
+        'content':None,
+        'response':None
+    }
+    if request.method == 'POST' and 'Enviar' in request.POST:
+        form = FileForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = request.FILES['file']
+            xml_binary = f.read()
+            xml = xml_binary.decode('utf-8')
+            ctx['xml'] = xml
+            response = requests.post(endpoint + 'add', data=xml_binary)
+            if response.ok:
+                ctx['response'] = 'Archivo XML cargado corrrectamente'
+            else:
+                ctx['response'] = 'El archivo se envio, pero hubo un error en el servidor'
+    else:
+        return render(request, 'mensaje.html')
+    return render(request, 'mensaje.html', ctx)
 
 
 def datos(request):
