@@ -2,12 +2,11 @@
 {% load static %}
 {% block content %}
 <div class="container py-2">
-    <h1 style="text-align: center;"> Carga de Archivo </h1>
+    <h1 style="text-align: center;"> Prueba de mensaje </h1>
 </div>
 <div class="container py-2">
 <form action="/cargar/" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-<label for="file">Cargar un archivo</label>
 <br>
 <input type="file" id="file" name="file" accept="text/xml">
 <div class="container py-3">
@@ -20,7 +19,6 @@
     {% endif %}
 </div>
 <button type="submit" class="btn btn-dark btn-lg">Enviar</button>
-<button type="submit" class="btn btn-dark btn-lg">Borrar</button>
 </form>
 </div>
 {% endblock content %}

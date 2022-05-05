@@ -14,7 +14,6 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-<script src="{% static 'jspdf.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"
     integrity="sha512-cLuyDTDg9CSseBSFWNd4wkEaZ0TBEpclX0zD3D6HjI19pO39M58AgJ1SjHp6c7ZOp0/OCRcC2BCvvySU9KJaGw=="
     crossorigin="anonymous"></script>
@@ -45,14 +44,14 @@
                     {% endif %}
                         <a class="nav-link" href="{% url 'index' %}">Inicio</a>
                     </li>
-                    <!--{% if 'Carga' == tab %}
-                    <li class="nav-item active"style="padding-right: 15px;">
+
+                    {% if 'Carga' == tab %}
+                    <li class="nav-item active" style="padding-right: 15;">
                     {% else %}
-                    <li class="nav-item"style="padding-right: 15px;">
+                    <li class="nav-item" style="padding-right: 15;"></li>
                     {% endif %}
-                        
-                        <a class="nav-link" href="{% url 'carga' %}">Cargar Archivo</a>
-                    </li> -->
+                        <a class="nav-link" href="{% url 'carga' %}">Carga</a>
+                    </li>
                     
                     <!---->
                     {% if 'Consulta de Datos' == tab %}
@@ -70,7 +69,7 @@
                             <!--<a class="dropdown-item" href="">Resumen Rango de Fechas</a>-->
                             <a class="dropdown-item" href="">Resumen de Clasificación por Fechas</a>
                             <a class="dropdown-item" href="">Resumen Rango de Fechas</a>
-                            <a class="dropdown-item" href="">Prueba de mensaje</a>
+                            <a class="dropdown-item" href="{% url 'mensaje' %}">Prueba de mensaje</a>
                             
                         </div>
                     </li>

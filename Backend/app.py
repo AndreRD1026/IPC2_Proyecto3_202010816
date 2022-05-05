@@ -1,3 +1,6 @@
+from turtle import position
+import unicodedata
+from unittest import result
 from manager import Manager
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -10,8 +13,11 @@ app = Flask(__name__)
 CORS(app)
 listadiccionario = []
 listasalida = []
+listapalabras = []
+listapalabrasn = []
+listamensajes = []
+new_palabras = []
 manage = Manager()
-
 
 #@app.route('/')
 #def index():
@@ -27,9 +33,15 @@ def prueba():
 #Métodos POST
 @app.route('/addarchivo', methods=['POST'])
 def addarchivo():
+    global mensaje
+    global fecha
+    global palabra_p
+    global palabra_neg
+    global new_palabras
     palabra_pos = ''
     palabra_neg = ''
     subelemento1 = ''
+    
     xml = request.get_data().decode('utf-8')
     raiz = ET.XML(xml)
     for elemento in raiz:
@@ -38,11 +50,17 @@ def addarchivo():
                 if subelemento.tag == 'sentimientos_positivos':
                     for subelemento1 in subelemento:
                         if subelemento1.tag == 'palabra':
-                            manage.agregar_palabra_pos(subelemento1.text.strip())
+                            listapalabras = normalize(subelemento1.text.strip())
+                            print("Palabra: " + listapalabras)
+                            #manage.agregar_palabra_pos(subelemento1.text.strip())
+                            manage.agregar_palabra_pos(listapalabras)
                 if subelemento.tag == 'sentimientos_negativos':
                     for subelemento1 in subelemento:
                         if subelemento1.tag == 'palabra':
-                            manage.agregar_palabra_neg(subelemento1.text.strip())
+                            listapalabrasn = normalize(subelemento1.text)
+                            print("Neg:" + listapalabrasn)
+                            #manage.agregar_palabra_neg(subelemento1.text.strip())
+                            manage.agregar_palabra_neg(listapalabrasn)
 
                 if subelemento.tag == 'empresas_analizar':
                     index = 0
@@ -53,10 +71,12 @@ def addarchivo():
                                 manage.agregar_empresa(subelemento2.text)
                                 index2 = 0
                             if subelemento2.tag == 'servicio':
-                                manage.empresas[index].agregar_servicio(subelemento2.attrib['nombre'])
+                                nuevoservicio = normalize(subelemento2.attrib['nombre'])
+                                manage.empresas[index].agregar_servicio(nuevoservicio)
                                 
                                 for subelemento3 in subelemento2:
-                                    manage.empresas[index].servicios[index2].agregar_alias(subelemento3.text)
+                                    nuevoalias = normalize(subelemento3.text)
+                                    manage.empresas[index].servicios[index2].agregar_alias(nuevoalias)
                                 index2 += 1
                         index += 1
         #####Mensajes
@@ -65,37 +85,32 @@ def addarchivo():
                 if subelemento.tag == 'mensaje':
                     expresion_re = re.compile(r'(\D+:)\s+(\D+),\s+(\d+\D\d+\D\d+)\s+(\d+:\d+)\s+(\D+:)\s+(\S+|([^@]+@[^.]+.\S+))\s*(\D+:)\s+(\S+)\s+(\D+)')
                     datosmen = expresion_re.findall(subelemento.text)
-                    manage.agregar_mensajes(datosmen[0][1],datosmen[0][2],datosmen[0][3],datosmen[0][5],datosmen[0][8],datosmen[0][9])
                     fecha = (datosmen[0][2])
-                    print(fecha)
-                    # info = subelemento.text.replace("\r","").replace("\n","").replace('\t',"")
-                    # #print(info)
-                    # lugarfecha = info.split(',')
-                    # lugar = lugarfecha[0]
-                    # fecha = lugarfecha[1].split(" ")[1]
-                    # hora = lugarfecha[1].split(" ")[2]
-                    # usuario = lugarfecha[1].split(" ")[4]
-                    # red = lugarfecha[1].split(" ")[7]
-                    # mensaje = lugarfecha[1].split("")[8]
-                    # print(lugar)
-                    # print("Fecha " , fecha)
-                    # print("Hora", hora)
-                    # print("Usuario", usuario)
-                    # print("Red", red)
-                    # print(mensaje)
-                    posicion = 0
-                    encontrado = False
-                    #inicioCorrelativo = int(anio+mes+dia)
+                    mensaje = normalize(datosmen[0][9])
+                    dia = fecha.split("/")[0]
+                    mes = fecha.split("/")[1]
+                    anio = fecha.split("/")[2]
+                    #print("Anio ", anio)
+                    mensaje2 = mensaje
+                    manage.agregar_mensajes(datosmen[0][1],datosmen[0][2],datosmen[0][3],datosmen[0][5],datosmen[0][8],mensaje2)     
+                    #print(fecha)
+                    print(mensaje)
                     
-                    for i in range (0,len(listasalida)):
-                        if listasalida[i].fecha == fecha:
+                    for i in range (0,len(listadiccionario)):
+                        if listadiccionario[i].fecha == fecha:
                             encontrado = True
                             posicion = i
                             print("Dte correcto")
+                    #inicioCorrelativo = int(anio+mes+dia)
+            
+
                     
                     
-    actualizarXml()    
+    #analizar()    
+    manage.analizararchivo()      
+    actualizarXml()   
     return jsonify({'ok' : True, 'msg':'Archivo XML leído correctamente'}), 200
+
 
 def normalize(s):
     replacements = (
@@ -111,10 +126,10 @@ def normalize(s):
 
 
 def actualizarXml():
-    global listasalida
+    global listadiccionario
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
     xml += "<lista_respuestas>\n"
-    for salida in listasalida:
+    for salida in listadiccionario:
         xml += "    <respuesta>\n"
         xml += "        <fecha>" + salida.fecha + "</fecha>\n"
         xml += "        <mensajes>\n"
@@ -166,6 +181,25 @@ def get_empresas():
 @app.route('/getmensaje', methods=['GET'])
 def get_mensaje():
     return jsonify(manage.obtener_mensajes()), 200
+
+
+@app.route('/getsalida', methods=['GET'])
+def get_salida():
+    return jsonify(manage.analizararchivo()), 200
+
+
+@app.route('/reset', methods=['DELETE'])
+def reset():
+    global listapalabrasn, listapalabras
+    listapalabras = []
+    listapalabrasn = []
+    fo = open("salida.xml","w")
+    fo.write("")
+    fo.close()
+    respuesta = {
+        'mensaje' : 'Base reseteada'
+    }
+    return jsonify(respuesta)
         
 
 if __name__=='__main__':
