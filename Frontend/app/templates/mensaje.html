@@ -11,14 +11,14 @@
 <input type="file" id="file" name="file" accept="text/xml">
 <div class="container py-3">
     {% if content %}   
-        <textarea label="textarea" name="textarea" rows="20" cols="55">{{content}}</textarea>
-        <textarea label="textarea" name="textarea2" rows="20" cols="55">{{response}}</textarea>
+        <textarea label="textarea" name="textarea" rows="20" cols="55">{{message}}</textarea>
+        <textarea label="textarea" name="textarea2" rows="20" cols="55">{{answer}}</textarea>
     {% else %}
         <textarea style="margin-right: 1rem;" label="textarea" name="textarea" rows="20" cols="55"></textarea>
         <textarea label="textarea" name="textarea2" rows="20" cols="55"></textarea>
     {% endif %}
 </div>
-<button type="submit" class="btn btn-dark btn-lg">Enviar</button>
+<button type="submit" class="btn btn-dark btn-lg">Enviar Mensaje</button>
 </form>
 </div>
 {% endblock content %}
