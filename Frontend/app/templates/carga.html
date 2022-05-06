@@ -20,7 +20,11 @@
     {% endif %}
 </div>
 <button type="submit" class="btn btn-dark btn-lg">Enviar</button>
-<button type="submit" class="btn btn-dark btn-lg">Borrar</button>
+<form action="/reset/" method="POST">
+    {% csrf_token %}
+    <button  class="btn btn-danger">Resetear la Base de Datos</button>
 </form>
+</form>
+
 </div>
 {% endblock content %}

@@ -65,10 +65,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item"href="{% url 'datos' %}">Consultar Datos</a>
-                            <!--<a class="dropdown-item" href="">Resumen IVA</a>-->
-                            <!--<a class="dropdown-item" href="">Resumen Rango de Fechas</a>-->
-                            <a class="dropdown-item" href="">Resumen de Clasificación por Fechas</a>
-                            <a class="dropdown-item" href="">Resumen Rango de Fechas</a>
+                            <a class="dropdown-item" href="{% url 'resumenMensaje' %}">Resumen de Clasificación por Fechas</a>
+                            <a class="dropdown-item" href="{% url 'resumenFechas' %}">Resumen Rango de Fechas</a>
                             <a class="dropdown-item" href="{% url 'mensaje' %}">Prueba de mensaje</a>
                             
                         </div>
@@ -103,5 +101,5 @@
     </body>
     {%block script%}
     {% endblock %}
-    
+
 </html>

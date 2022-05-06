@@ -3,7 +3,7 @@ from django import forms
 class FileForm(forms.Form):
     file = forms.FileField(label='file')
 
-class IvaForm(forms.Form):
+class MensajeForm(forms.Form):
     fecha = forms.DateField(label="fecha")
 class RangoForm(forms.Form):
 
