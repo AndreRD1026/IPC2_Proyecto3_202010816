@@ -153,17 +153,16 @@ def mensaje(request):
         'response':None
     }
     if request.method == 'POST' and 'Enviar Mensaje' in request.POST:
-        form = FileForm(request.POST, request.FILES)
+        form = FileForm(request.POST)
         if form.is_valid():
             #f = request.FILES['file']
             #xml_binary = f.read()
-            #xml = xml_binary.decode('utf-8')
-            #ctx['message'] = xml
-            message = requests.post(endpoint + 'mandarmensaje')
-            if message.ok:
-                message = requests.get(endpoint + 'getsalidamensaje')
-                datos = message.text
-                ctx['answer'] = datos
+            cadena = request
+            ctx['content'] = cadena
+            response = requests.post(endpoint + 'mandarmensaje')
+            if response.ok:
+                
+                ctx['answer'] = 'Mensaje leido'
             else:
                 ctx['answer'] = 'El archivo se envio, pero hubo un error en el servidor'
     elif request.method == 'POST' and 'Resetear Base de Datos' in request.POST:
