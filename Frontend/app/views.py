@@ -159,12 +159,9 @@ def mensaje(request):
             #xml_binary = f.read()
             cadena = request
             ctx['content'] = cadena
-            #message = requests.post(endpoint + 'mandarmensaje')
             response = requests.post(endpoint + 'mandarmensaje')
             if response.ok:
-                #message = requests.get(endpoint + 'getsalidamensaje')
-                #datos = message.text
-                #ctx['answer'] = datos
+                
                 ctx['answer'] = 'Mensaje leido'
             else:
                 ctx['answer'] = 'El archivo se envio, pero hubo un error en el servidor'

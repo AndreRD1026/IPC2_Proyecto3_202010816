@@ -555,7 +555,7 @@ def reset():
     }
     return jsonify(respuesta)
 
-    
+
 def ResumenEmpresafecha(fecha,empresa):
     fechaNew = LecturafechaEntrada(fecha)
     fechaNew = fechaNew.replace(" ","")
